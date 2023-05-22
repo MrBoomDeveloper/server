@@ -1,4 +1,4 @@
-import { serve } from "std/http/server.ts";
+import { serve } from "@std/http/server.ts";
 
 function handler(request: Request): Response {
 	console.log(JSON.stringify(request));
