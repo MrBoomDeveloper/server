@@ -1,7 +1,30 @@
-var http = require('http');
+import express from "express";
+import accountRoute from "./src/routes/account.js";
+import profileRoute from "./src/routes/profile.js";
 
-//create a server object:
-http.createServer(function (req, res) {
-  res.write('Hi!'); //write a response to the client
-  res.end(); //end the response
-}).listen(8080); //the server object listens on port 8080
+const app = express();
+
+app.use((req, res, next) => {
+	console.log("New request at: " + Date.now());
+	next();
+});
+
+app.get("/", (req, res) => {
+	res.send({
+		status: "ok"
+	});
+});
+
+app.use("/account", accountRoute);
+app.use("/profile", profileRoute);
+
+app.get("*", handleUnknown);
+app.post("*", handleUnknown);
+app.delete("*", handleUnknown);
+
+function handleUnknown(req, res) {
+	res.status(404);
+	res.send({ errorCode: "route.unknown" });
+}
+
+app.listen(8080);
