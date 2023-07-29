@@ -1,8 +1,10 @@
+import dotenv from "dotenv";
 import express from "express";
 import accountRoute from "./src/routes/account.js";
 import profileRoute from "./src/routes/profile.js";
 
 const app = express();
+dotenv.config();
 
 app.use((req, res, next) => {
 	console.log("New request at: " + Date.now());
@@ -11,7 +13,8 @@ app.use((req, res, next) => {
 
 app.get("/", (req, res) => {
 	res.send({
-		status: "ok"
+		status: "ok",
+		secret: process.env.DB_HOST
 	});
 });
 
