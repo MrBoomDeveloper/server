@@ -1,8 +1,12 @@
 import express from "express";
-import accountRoute from "./src/routes/account.js";
-import profileRoute from "./src/routes/profile.js";
+import bodyParser from "body-parser";
+import accountRoute from "@routes/account";
+import profileRoute from "@routes/profile";
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use((req, res, next) => {
 	console.log("New request at: " + Date.now());
@@ -10,7 +14,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-	res.send({
+	res.json({
 		status: "ok",
 		secret: process.env.DB_HOST || "Not found"
 	});
@@ -25,7 +29,9 @@ app.delete("*", handleUnknown);
 
 function handleUnknown(req, res) {
 	res.status(404);
-	res.send({ errorCode: "route.unknown" });
+	res.json({ errorCode: "route.unknown" });
 }
 
-app.listen(8080);
+app.listen(8080, () => {
+	console.log("Server started!");
+});
